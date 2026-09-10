@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +18,6 @@
                 <li><a href="#emergency">Emergency</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="login-btn">Login</button>
         </nav>
     </header>
 
@@ -33,6 +32,7 @@
                     <div class="search-box">
                         <input type="text" class="search-input" placeholder="Search acceptor, donors, hospitals, etc.">
                         <button class="search-btn">🔍 Find Now</button>
+                        <div id="searchResults" class="search-results"></div>
                     </div>
                 </div>
 
@@ -89,6 +89,38 @@
                         <button type="submit" class="submit-btn">Submit</button>
                     </form>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section class="services" id="articles" style="background: white;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <h2 style="color: #8B0000; font-size: 2.2rem;">Articles & Resources</h2>
+                <p style="color: #666;">Trusted information on blood donation from health authorities.</p>
+            </div>
+            <div class="services-grid">
+                <a href="https://www.who.int/news-room/fact-sheets/detail/blood-safety-and-availability" target="_blank" rel="noopener" class="service-card" style="text-decoration: none;">
+                    <div class="service-icon">🌍</div>
+                    <div class="service-title">Blood Safety & Availability</div>
+                    <div class="service-desc">World Health Organization (WHO) fact sheet on global blood donation statistics and safety standards.</div>
+                </a>
+                <a href="https://www.redcrossblood.org/Eligibility" target="_blank" rel="noopener" class="service-card" style="text-decoration: none;">
+                    <div class="service-icon">✅</div>
+                    <div class="service-title">Who Can Donate Blood?</div>
+                    <div class="service-desc">American Red Cross's detailed eligibility requirements by donation type.</div>
+                </a>
+                <a href="https://www.redcrossblood.org/" target="_blank" rel="noopener" class="service-card" style="text-decoration: none;">
+                    <div class="service-icon">🩹</div>
+                    <div class="service-title">The Donation Process</div>
+                    <div class="service-desc">American Red Cross's guide on what to expect before, during, and after donating.</div>
+                </a>
+                <a href="https://eraktkosh.mohfw.gov.in/BLDAHIMS/bloodbank/about.cnt" target="_blank" rel="noopener" class="service-card" style="text-decoration: none;">
+                    <div class="service-icon">🇮🇳</div>
+                    <div class="service-title">e-RaktKosh (India)</div>
+                    <div class="service-desc">Government of India's official blood bank management portal — check blood availability nationwide.</div>
+                </a>
             </div>
         </div>
     </section>
@@ -172,10 +204,26 @@
                 <div class="compatibility">
                     <h3>Blood Type Compatibility</h3>
                     <p>A blood type is a classification of blood based on the presence or absence of antigens on the surface of red blood cells. Human blood is divided into one of four main blood types: A, B, AB, and O, and is further divided into Rh+ or Rh-.</p>
+
+                    <div class="compat-calculator">
+                        <label for="compatSelector" style="font-weight: bold; margin-right: 0.5rem;">Select your blood group:</label>
+                        <select id="compatSelector">
+                            <option value="">-- Choose --</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <p id="compatResult" class="compat-result"></p>
+                    </div>
                     
                     <div class="blood-table">
                         <div class="table-header">You can receive type</div>
-                        <div class="blood-grid">
+                        <div class="blood-grid" id="bloodGrid">
                             <div class="blood-cell"></div>
                             <div class="blood-cell">O+</div>
                             <div class="blood-cell">O-</div>
@@ -185,78 +233,94 @@
                             <div class="blood-cell">B-</div>
                             <div class="blood-cell">AB+</div>
                             <div class="blood-cell">AB-</div>
-                            <div class="blood-cell donor">O+</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell donor">O-</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell donor">A+</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell donor">A-</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell donor">B+</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell donor">B-</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell donor">AB+</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell donor">AB-</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
-                            <div class="blood-cell"></div>
-                            <div class="blood-cell compatible">🩸</div>
+                            <div class="blood-row" data-recipient="O+" style="display: contents;">
+                                <div class="blood-cell donor">O+</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                            </div>
+                            <div class="blood-row" data-recipient="O-" style="display: contents;">
+                                <div class="blood-cell donor">O-</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                            </div>
+                            <div class="blood-row" data-recipient="A+" style="display: contents;">
+                                <div class="blood-cell donor">A+</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                            </div>
+                            <div class="blood-row" data-recipient="A-" style="display: contents;">
+                                <div class="blood-cell donor">A-</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                            </div>
+                            <div class="blood-row" data-recipient="B+" style="display: contents;">
+                                <div class="blood-cell donor">B+</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                            </div>
+                            <div class="blood-row" data-recipient="B-" style="display: contents;">
+                                <div class="blood-cell donor">B-</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell"></div>
+                            </div>
+                            <div class="blood-row" data-recipient="AB+" style="display: contents;">
+                                <div class="blood-cell donor">AB+</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell compatible">🩸</div>
+                            </div>
+                            <div class="blood-row" data-recipient="AB-" style="display: contents;">
+                                <div class="blood-cell donor">AB-</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                                <div class="blood-cell"></div>
+                                <div class="blood-cell compatible">🩸</div>
+                            </div>
                         </div>
                     </div>
 
@@ -273,7 +337,42 @@
         </div>
     </section>
 
-    <!-- Success Stories Section -->
+    <!-- Donor Eligibility Checker -->
+    <section class="eligibility" id="eligibility">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="color: #8B0000; font-size: 2.2rem;">Can You Donate Blood Today?</h2>
+                <p style="color: #666;">Answer a few quick questions to check your eligibility.</p>
+            </div>
+
+            <form id="eligibilityForm" class="eligibility-form">
+                <div class="form-group">
+                    <label>Age (years)</label>
+                    <input type="number" id="eligAge" min="1" max="120" required>
+                </div>
+                <div class="form-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="eligWeight" min="1" max="300" required>
+                </div>
+                <div class="form-group">
+                    <label>Date of last blood donation (leave blank if never donated)</label>
+                    <input type="date" id="eligLastDonation">
+                </div>
+                <div class="form-group">
+                    <label>Do you currently have any of these? (fever, cold/flu, recent surgery, or are pregnant)</label>
+                    <select id="eligHealth">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Check Eligibility</button>
+            </form>
+
+            <div id="eligibilityResult" class="eligibility-result"></div>
+        </div>
+    </section>
+
+
     <!-- <section class="success-stories" id="stories">
         <div class="container">
             <div style="text-align: center; margin-bottom: 3rem;">
@@ -415,19 +514,19 @@
         <div style="text-align: center; margin-top: 3rem;">
             <div class="impact-stats">
                 <div class="stat-item">
-                    <div class="stat-number">10,000+</div>
+                    <div class="stat-number" id="statLivesSaved">10,000+</div>
                     <div class="stat-label">Lives Saved</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">25,000+</div>
+                    <div class="stat-number" id="statUnitsDonated">25,000+</div>
                     <div class="stat-label">Blood Units Donated</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">5,000+</div>
+                    <div class="stat-number" id="statActiveDonors">5,000+</div>
                     <div class="stat-label">Active Donors</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">200+</div>
+                    <div class="stat-number" id="statPartnerHospitals">200+</div>
                     <div class="stat-label">Partner Hospitals</div>
                 </div>
             </div>

@@ -1,5 +1,7 @@
 // Main JavaScript functionality for Jeevan Blood Donation Website
 
+const API_BASE = 'http://localhost:5000/api'; // change this when you deploy the backend
+
 // DOM Content Loaded Event
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
@@ -9,12 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeServiceCards();
     initializeAnimations();
     initializeScrollEffects();
+    initializeLiveStats();
+    initializeCompatibilityCalculator();
+    initializeEligibilityChecker();
 });
 
 // Navigation functionality
 function initializeNavigation() {
     const navLinks = document.querySelectorAll('.nav-links a');
-    const loginBtn = document.querySelector('.login-btn');
     
     // Smooth scrolling for navigation links
     navLinks.forEach(link => {
@@ -30,11 +34,6 @@ function initializeNavigation() {
                 });
             }
         });
-    });
-
-    // Login button functionality
-    loginBtn.addEventListener('click', function() {
-        showAlert('Login functionality will be implemented soon!', 'info');
     });
 }
 
@@ -99,42 +98,117 @@ function initializeForms() {
 }
 
 // Handle donation form submission
-function handleDonationFormSubmission(form) {
+async function handleDonationFormSubmission(form) {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
-    
+
     // Basic validation
     if (!validateDonationForm(data)) {
         return;
     }
-    
-    // Simulate form submission
-    showAlert('Thank you for registering! We will contact you soon.', 'success');
-    form.reset();
-    
-    // Here you would typically send data to server
-    console.log('Donation form data:', data);
+
+    try {
+        const response = await fetch(`${API_BASE}/donors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            showAlert(result.message || 'Something went wrong. Please try again.', 'error');
+            return;
+        }
+
+        showAlert('Thank you for registering! We will contact you soon.', 'success');
+        form.reset();
+    } catch (err) {
+        console.error('Donation form submission failed:', err);
+        showAlert('Could not reach the server. Please try again later.', 'error');
+    }
 }
 
 // Handle subscribe form submission
-function handleSubscribeFormSubmission(form) {
+async function handleSubscribeFormSubmission(form) {
     const email = form.querySelector('.subscribe-input').value;
-    
+
     if (!validateEmail(email)) {
         showAlert('Please enter a valid email address', 'error');
         return;
     }
-    
-    showAlert('Successfully subscribed to newsletter!', 'success');
-    form.reset();
-    
-    console.log('Subscribed email:', email);
+
+    try {
+        const response = await fetch(`${API_BASE}/subscribe`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            showAlert(result.message || 'Subscription failed. Please try again.', 'error');
+            return;
+        }
+
+        showAlert(result.message || 'Successfully subscribed to newsletter!', 'success');
+        form.reset();
+    } catch (err) {
+        console.error('Subscribe failed:', err);
+        showAlert('Could not reach the server. Please try again later.', 'error');
+    }
 }
 
 // Handle search functionality
-function handleSearch(searchTerm) {
-    showAlert(`Searching for: "${searchTerm}"... This feature will be implemented soon!`, 'info');
-    console.log('Search term:', searchTerm);
+async function handleSearch(searchTerm) {
+    const resultsContainer = document.getElementById('searchResults');
+
+    try {
+        const response = await fetch(`${API_BASE}/donors/search?q=${encodeURIComponent(searchTerm)}`);
+        const result = await response.json();
+
+        if (!response.ok) {
+            showAlert(result.message || 'Search failed. Please try again.', 'error');
+            return;
+        }
+
+        renderSearchResults(result.results, resultsContainer);
+    } catch (err) {
+        console.error('Search failed:', err);
+        showAlert('Could not reach the server. Please try again later.', 'error');
+    }
+}
+
+// Render the list of matched donors/acceptors into the search box
+function renderSearchResults(results, container) {
+    if (!container) return;
+
+    if (!results || results.length === 0) {
+        container.innerHTML = '<div class="search-result-empty">No matches found. Try a different name, city, or blood group.</div>';
+        return;
+    }
+
+    container.innerHTML = results
+        .map(
+            (person) => `
+                <div class="search-result-item">
+                    <div class="search-result-info">
+                        <strong>${escapeHtml(person.name)}</strong>
+                        <span>${escapeHtml(person.location)} • ${person.role === 'donor' ? 'Donor' : 'Acceptor'}</span>
+                    </div>
+                    <div class="search-result-badge">${escapeHtml(person.bloodGroup)}</div>
+                </div>
+            `
+        )
+        .join('');
+}
+
+// Basic escaping so donor-submitted text can't break the HTML
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
 }
 
 // Form validation functions
@@ -211,7 +285,7 @@ function initializeServiceCards() {
 function handleServiceCardClick(service) {
     switch(service) {
         case 'looking':
-            showAlert('Redirecting to blood search page...', 'info');
+            window.location.href = 'looking-for-blood.html';
             break;
         case 'donate':
             // Scroll to donation form
@@ -221,10 +295,10 @@ function handleServiceCardClick(service) {
             });
             break;
         case 'appointment':
-            showAlert('Appointment booking will be available soon!', 'info');
+            window.location.href = 'appointment.html';
             break;
         case 'nearby':
-            showAlert('Finding nearby blood drives...', 'info');
+            window.location.href = 'nearby-blood-drive.html';
             break;
     }
 }
@@ -270,13 +344,6 @@ function initializeScrollEffects() {
         }
     });
     
-    // Parallax effect for hero section
-    const hero = document.querySelector('.hero');
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const parallax = scrolled * 0.5;
-        hero.style.transform = `translateY(${parallax}px)`;
-    });
 }
 
 // Utility function to show alerts
@@ -419,3 +486,126 @@ For developers:
 
 Need help? Contact: jeevaninfo@mail.com
 `);
+
+// ============================================================
+// FEATURE: Live Stats (pulls real numbers from the backend)
+// ============================================================
+async function initializeLiveStats() {
+    try {
+        const response = await fetch(`${API_BASE}/stats`);
+        if (!response.ok) return; // fail silently, keep the hardcoded placeholder numbers
+
+        const stats = await response.json();
+
+        setStatIfPresent('statLivesSaved', stats.livesSaved);
+        setStatIfPresent('statUnitsDonated', stats.bloodUnitsDonated);
+        setStatIfPresent('statActiveDonors', stats.activeDonors);
+        setStatIfPresent('statPartnerHospitals', stats.partnerHospitals);
+    } catch (err) {
+        console.error('Could not load live stats, showing defaults:', err);
+    }
+}
+
+function setStatIfPresent(elementId, value) {
+    const el = document.getElementById(elementId);
+    if (el && typeof value === 'number') {
+        el.textContent = value.toLocaleString() + '+';
+    }
+}
+
+// ============================================================
+// FEATURE: Interactive Blood Compatibility Calculator
+// ============================================================
+const COMPATIBLE_DONORS_FOR = {
+    'O+': ['O+', 'O-'],
+    'O-': ['O-'],
+    'A+': ['A+', 'A-', 'O+', 'O-'],
+    'A-': ['A-', 'O-'],
+    'B+': ['B+', 'B-', 'O+', 'O-'],
+    'B-': ['B-', 'O-'],
+    'AB+': ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    'AB-': ['A-', 'B-', 'AB-', 'O-'],
+};
+
+function initializeCompatibilityCalculator() {
+    const selector = document.getElementById('compatSelector');
+    const resultEl = document.getElementById('compatResult');
+    const grid = document.getElementById('bloodGrid');
+
+    if (!selector || !grid) return;
+
+    selector.addEventListener('change', function() {
+        const recipient = this.value;
+
+        // Reset all rows/cells
+        grid.querySelectorAll('.blood-row').forEach(row => row.style.opacity = '1');
+        grid.querySelectorAll('.blood-cell').forEach(cell => cell.classList.remove('row-highlight', 'dimmed'));
+
+        if (!recipient) {
+            if (resultEl) resultEl.textContent = '';
+            return;
+        }
+
+        // Dim all rows except the selected one, and highlight the selected row's cells
+        grid.querySelectorAll('.blood-row').forEach(row => {
+            if (row.getAttribute('data-recipient') === recipient) {
+                row.querySelectorAll('.blood-cell').forEach(cell => cell.classList.add('row-highlight'));
+            } else {
+                row.querySelectorAll('.blood-cell').forEach(cell => cell.classList.add('dimmed'));
+            }
+        });
+
+        const compatibleGroups = COMPATIBLE_DONORS_FOR[recipient] || [];
+        if (resultEl) {
+            resultEl.textContent = `As a ${recipient} recipient, you can receive blood from: ${compatibleGroups.join(', ')}.`;
+        }
+    });
+}
+
+// ============================================================
+// FEATURE: Donor Eligibility Checker
+// ============================================================
+function initializeEligibilityChecker() {
+    const form = document.getElementById('eligibilityForm');
+    const resultEl = document.getElementById('eligibilityResult');
+
+    if (!form || !resultEl) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const age = parseInt(document.getElementById('eligAge').value, 10);
+        const weight = parseFloat(document.getElementById('eligWeight').value);
+        const lastDonationValue = document.getElementById('eligLastDonation').value;
+        const hasHealthIssue = document.getElementById('eligHealth').value === 'yes';
+
+        const reasons = [];
+
+        if (age < 18 || age > 65) {
+            reasons.push('Donors must be between 18 and 65 years old.');
+        }
+        if (weight < 50) {
+            reasons.push('Donors must weigh at least 50 kg.');
+        }
+        if (hasHealthIssue) {
+            reasons.push('Please wait until you have fully recovered before donating.');
+        }
+        if (lastDonationValue) {
+            const lastDonation = new Date(lastDonationValue);
+            const daysSince = Math.floor((new Date() - lastDonation) / (1000 * 60 * 60 * 24));
+            if (daysSince < 90) {
+                reasons.push(`You must wait at least 90 days between donations (${90 - daysSince} day(s) remaining).`);
+            }
+        }
+
+        resultEl.classList.remove('eligible', 'not-eligible');
+
+        if (reasons.length === 0) {
+            resultEl.classList.add('eligible');
+            resultEl.textContent = '✅ You appear to be eligible to donate blood today! Please still get a final check-up at the donation center.';
+        } else {
+            resultEl.classList.add('not-eligible');
+            resultEl.innerHTML = '❌ You may not be eligible to donate right now:<br>• ' + reasons.join('<br>• ');
+        }
+    });
+}
