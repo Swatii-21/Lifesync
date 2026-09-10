@@ -1,6 +1,6 @@
 // Main JavaScript functionality for Jeevan Blood Donation Website
 
-const API_BASE = 'http://localhost:5000/api'; // change this when you deploy the backend
+const API_BASE = 'https://bloodsync-9g0v.onrender.com/api'; // change this when you deploy the backend
 
 // DOM Content Loaded Event
 document.addEventListener('DOMContentLoaded', function() {
