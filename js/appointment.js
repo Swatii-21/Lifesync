@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000/api'; // change this when you deploy the backend
+const API_BASE = 'https://bloodsync-9g0v.onrender.com/api'; // change this when you deploy the backend
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('appointmentForm');
